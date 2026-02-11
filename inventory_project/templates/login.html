@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% block title %}Login - Inventory System{% endblock %}
+{% block content %}
+
+<style>
+    .auth-page {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+</style>
+
+<div class="auth-page">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-5 col-lg-4">
+                <div class="card shadow-lg border-0"
+                    style="backdrop-filter: blur(10px); background: rgba(255,255,255,0.95);">
+                    <div class="card-header bg-transparent border-0 text-center py-4">
+                        <div class="mb-3">
+                            <i class="fas fa-lock" style="font-size: 3rem; color: #2563eb;"></i>
+                        </div>
+                        <h3 class="mb-0 fw-bold">Welcome Back</h3>
+                        <p class="text-muted mb-0">Sign in to your account</p>
+                    </div>
+                    <div class="card-body px-4 pb-4">
+                        {% if messages %}
+                        {% for message in messages %}
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <i class="fas fa-exclamation-circle me-2"></i>{{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+
+                        <form method="post" novalidate>
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label for="username" class="form-label fw-600">Username</label>
+                                <input type="text" class="form-control form-control-lg" id="username" name="username"
+                                    placeholder="Enter your username" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="password" class="form-label fw-600">Password</label>
+                                <input type="password" class="form-control form-control-lg" id="password"
+                                    name="password" placeholder="Enter your password" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100 py-3 fw-bold mb-3">
+                                <i class="fas fa-sign-in-alt me-2"></i>Login
+                            </button>
+                        </form>
+
+                        <div class="text-center">
+                            <p class="text-muted mb-0 small">
+                                Don't have an account?
+                                <a href="{% url 'register' %}" class="text-decoration-none fw-bold">Create one</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .form-control,
+    .form-control-lg {
+        border: 2px solid #e5e7eb;
+        border-radius: 0.5rem;
+        transition: all 0.3s ease;
+    }
+
+    .form-control:focus,
+    .form-control-lg:focus {
+        border-color: #2563eb;
+        box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, 0.1);
+    }
+
+    .fw-600 {
+        font-weight: 600;
+    }
+</style>
+
+{% endblock %}

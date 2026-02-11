@@ -56,9 +56,8 @@ ROOT_URLCONF = "inventory_project.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [os.path.join(BASE_DIR, 'templates')],
         "APP_DIRS": True,
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         "OPTIONS": {
             "context_processors": [
                 "django.template.context_processors.request",
@@ -120,3 +119,6 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+# Login settings
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'dashboard'

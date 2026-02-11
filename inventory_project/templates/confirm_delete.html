@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% block title %}Confirm Delete - Inventory System{% endblock %}
+{% block content %}
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6">
+        <div class="card shadow-lg border-0">
+            <div class="card-header" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);">
+                <h4 class="mb-0 text-white"><i class="fas fa-exclamation-triangle"></i> Confirm Deletion</h4>
+            </div>
+            <div class="card-body">
+                <p class="text-muted mb-3">
+                    Are you sure you want to delete the following <strong>{{ object_type|lower }}</strong>?
+                </p>
+                <div class="alert alert-warning border-warning" role="alert">
+                    <i class="fas fa-warning me-2"></i>
+                    <strong>{{ object.name }}</strong>
+                </div>
+                <p class="text-danger mb-4">
+                    <small><i class="fas fa-info-circle me-1"></i>This action <strong>cannot be undone!</strong></small>
+                </p>
+
+                <form method="post" class="d-flex gap-2">
+                    {% csrf_token %}
+                    <button type="submit"
+                        class="btn btn-danger flex-grow-1 d-flex align-items-center justify-content-center">
+                        <i class="fas fa-trash me-2"></i> Yes, Delete
+                    </button>
+                    <a href="javascript:history.back()"
+                        class="btn btn-secondary flex-grow-1 d-flex align-items-center justify-content-center">
+                        <i class="fas fa-times me-2"></i> Cancel
+                    </a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        border-radius: 0.75rem;
+        margin-top: 2rem;
+    }
+
+    .alert {
+        border-radius: 0.5rem;
+        padding: 1rem;
+    }
+
+    .btn {
+        border-radius: 0.5rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    @media (max-width: 576px) {
+        .col-md-6 {
+            padding: 1rem;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        .btn {
+            font-size: 0.9rem;
+            padding: 0.6rem 1rem;
+        }
+    }
+</style>
+
+{% endblock %}

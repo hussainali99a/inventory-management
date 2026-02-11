@@ -1,0 +1,220 @@
+{% extends 'base.html' %}
+{% block title %}{{ product.name }} - Inventory System{% endblock %}
+{% block content %}
+
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center">
+            <h1 class="page-title"><i class="fas fa-box-open"></i> {{ product.name }}</h1>
+            <div>
+                <a href="{% url 'edit_product' product.id %}" class="btn btn-warning me-2">
+                    <i class="fas fa-edit"></i> Edit
+                </a>
+                <a href="{% url 'product_list' %}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Back
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card shadow-lg">
+            <div class="card-header" style="background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);">
+                <h5 class="mb-0 text-white"><i class="fas fa-info-circle"></i> Product Information</h5>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <h6 class="text-muted"><i class="fas fa-tag"></i> Category</h6>
+                        <p>
+                            <a href="{% url 'category_list' %}" class="badge bg-light text-dark text-decoration-none">
+                                {{ product.category.name }}
+                            </a>
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="text-muted"><i class="fas fa-truck"></i> Supplier</h6>
+                        <p>
+                            <a href="{% url 'supplier_list' %}" class="text-decoration-none">
+                                <span class="badge bg-info">{{ product.supplier.name }}</span>
+                            </a>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <h6 class="text-muted"><i class="fas fa-dollar-sign"></i> Price</h6>
+                        <h4 class="text-primary fw-bold">${{ product.price }}</h4>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="text-muted"><i class="fas fa-warehouse"></i> Current Quantity</h6>
+                        <p>
+                            {% if product.is_low_stock %}
+                            <span class="badge bg-danger fs-6"><i class="fas fa-exclamation"></i> {{ product.quantity }}
+                                (Low Stock!)</span>
+                            {% else %}
+                            <span class="badge bg-success fs-6"><i class="fas fa-check"></i> {{ product.quantity
+                                }}</span>
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <h6 class="text-muted"><i class="fas fa-flag"></i> Reorder Level</h6>
+                        <p><span class="badge bg-warning">{{ product.reorder_level }}</span></p>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="text-muted"><i class="fas fa-calendar"></i> Created</h6>
+                        <p><small>{{ product.created_at|date:"M d, Y H:i" }}</small></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card shadow-lg">
+            <div class="card-header" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                <h5 class="mb-0 text-white"><i class="fas fa-history"></i> Recent Transactions</h5>
+            </div>
+            <div class="card-body" style="max-height: 600px; overflow-y: auto;">
+                {% if transactions %}
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th><i class="fas fa-arrow-right-arrow-left"></i> Type</th>
+                            <th><i class="fas fa-cubes"></i> Qty</th>
+                            <th><i class="fas fa-clock"></i> Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for trans in transactions %}
+                        <tr>
+                            <td>
+                                {% if trans.transaction_type == 'IN' %}
+                                <span class="badge bg-success"><i class="fas fa-arrow-down"></i> In</span>
+                                {% else %}
+                                <span class="badge bg-danger"><i class="fas fa-arrow-up"></i> Out</span>
+                                {% endif %}
+                            </td>
+                            <td><span class="badge bg-secondary">{{ trans.quantity }}</span></td>
+                            <td><small>{{ trans.date|date:"M d H:i" }}</small></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <div class="alert alert-info border-0 mb-0">
+                    <i class="fas fa-info-circle"></i> No transactions yet
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="card shadow-lg mt-3">
+            <div class="card-header" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+                <h5 class="mb-0 text-white"><i class="fas fa-tools"></i> Actions</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a href="{% url 'stock_transaction' %}"
+                        class="btn btn-warning d-flex align-items-center justify-content-center">
+                        <i class="fas fa-exchange-alt me-2"></i> Record Transaction
+                    </a>
+                    <a href="{% url 'delete_product' product.id %}"
+                        class="btn btn-danger d-flex align-items-center justify-content-center">
+                        <i class="fas fa-trash me-2"></i> Delete Product
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        border: none;
+        border-radius: 0.75rem;
+    }
+
+    .badge {
+        padding: 0.5rem 0.75rem;
+    }
+
+    @media (max-width: 768px) {
+        .page-title {
+            font-size: 1.5rem;
+        }
+
+        .btn {
+            padding: 0.5rem 0.75rem;
+            font-size: 0.875rem;
+        }
+    }
+</style>
+<p>{{ product.created_at|date:"M d, Y H:i" }}</p>
+</div>
+</div>
+
+<hr>
+
+<div class="d-flex gap-2">
+    <a href="{% url 'edit_product' product.id %}" class="btn btn-warning">
+        ✏️ Edit
+    </a>
+    <a href="{% url 'delete_product' product.id %}" class="btn btn-danger">
+        🗑️ Delete
+    </a>
+    <a href="{% url 'product_list' %}" class="btn btn-secondary">
+        ← Back to Products
+    </a>
+</div>
+</div>
+</div>
+</div>
+
+<div class="col-md-4">
+    <div class="card">
+        <div class="card-header bg-info">
+            <h5 class="mb-0 text-white">📋 Recent Transactions</h5>
+        </div>
+        <div class="card-body" style="max-height: 500px; overflow-y: auto;">
+            {% if transactions %}
+            <table class="table table-sm">
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Qty</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for trans in transactions %}
+                    <tr>
+                        <td>
+                            {% if trans.transaction_type == 'IN' %}
+                            <span class="badge bg-success">In</span>
+                            {% else %}
+                            <span class="badge bg-danger">Out</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ trans.quantity }}</td>
+                        <td><small>{{ trans.date|date:"M d H:i" }}</small></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p class="text-muted">No transactions yet</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+</div>
+
+{% endblock %}
